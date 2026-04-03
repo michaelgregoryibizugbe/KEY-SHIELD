@@ -1,0 +1,22 @@
+#!/bin/bash
+# KeyShield v3.0 — Professional CLI Wrapper
+# Automatically delegates commands to the virtual environment
+
+# Get the real directory of this script, resolving symlinks
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+# Check if virtual environment exists
+if [ ! -f "$DIR/venv/bin/python3" ]; then
+    echo "Error: Virtual environment not found in $DIR/venv"
+    echo "Please run: python3 -m venv venv && ./venv/bin/pip install -e ."
+    exit 1
+fi
+
+# Execute the tool using the venv's python and passing all arguments
+exec "$DIR/venv/bin/python3" "$DIR/keyshield_run.py" "$@"

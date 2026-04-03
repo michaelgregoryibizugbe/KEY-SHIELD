@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Run Scan{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>🔍 Security Scan</h2>
+    <p>Scan your system for keyloggers, input hooks, and other threats</p>
+</div>
+
+<div class="card">
+    <div class="card-title">⚡ Scan Controls</div>
+    <div style="display:flex; gap:16px; flex-wrap:wrap;">
+        <button id="btn-start-scan" class="btn btn-primary">🛡️ Full Scan</button>
+        <button id="btn-quick-scan" class="btn btn-secondary">⚡ Quick Scan</button>
+    </div>
+    <p style="margin-top:12px; font-size:0.85rem; color:var(--text-secondary);">
+        <strong>Full:</strong> 12 detectors, deep analysis &middot;
+        <strong>Quick:</strong> Essential checks, faster
+    </p>
+</div>
+
+<div id="scan-progress" style="display:none;">
+    <div class="card">
+        <div class="card-title"><span class="scan-pulse"></span> Scanning...</div>
+        <div class="progress-container">
+            <div class="progress-bar-bg">
+                <div id="progress-fill" class="progress-bar-fill" style="width:0%"></div>
+            </div>
+            <div class="progress-text">
+                <span id="progress-text">Initializing...</span>
+                <span id="progress-detector" class="progress-detector">...</span>
+            </div>
+        </div>
+        <div class="detector-grid" style="margin-top:20px;">
+            {% for name, icon, desc in [
+                ("KeyloggerDetector", "🔑", "Signatures + Heuristics"),
+                ("HookDetector", "🪝", "Hooks / LD_PRELOAD / Ptrace"),
+                ("ProcessDetector", "⚙️", "Anomaly + Parent-Child"),
+                ("ClipboardMonitor", "📋", "Hijack Detection"),
+                ("ScreenCaptureDetector", "📸", "Screenshot / Recording"),
+                ("NetworkExfilDetector", "🌐", "C2 / DNS Tunneling"),
+                ("DLLInjectionDetector", "💉", "DLL/SO Injection"),
+                ("PersistenceDetector", "🔄", "Registry / Cron / LaunchAgent"),
+                ("MemoryScanner", "🧠", "Fileless Malware"),
+                ("KernelModuleDetector", "🐧", "Rootkit Modules"),
+                ("USBDetector", "🔌", "BadUSB / Rubber Ducky"),
+                ("ScheduledTaskDetector", "⏰", "Tasks / Cron / Timers"),
+            ] %}
+            <div class="detector-card" data-detector="{{ name }}">
+                <div class="detector-status waiting"></div>
+                <div>
+                    <div style="font-weight:600; font-size:0.85rem;">{{ icon }} {{ name.replace('Detector','').replace('Monitor','') }}</div>
+                    <div style="font-size:0.75rem; color:var(--text-muted);">{{ desc }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div id="scan-results"></div>
+{% endblock %}

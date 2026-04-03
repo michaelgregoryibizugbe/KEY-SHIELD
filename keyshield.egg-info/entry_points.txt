@@ -1,0 +1,2 @@
+[console_scripts]
+keyshield = keyshield.cli.main:main

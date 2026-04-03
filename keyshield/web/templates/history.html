@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Scan History{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>📜 Scan History</h2>
+    <p>Review previous system security scans</p>
+</div>
+
+<div class="card">
+    <div class="card-title">All Scans</div>
+    {% if history %}
+    <table class="findings-table">
+        <thead>
+            <tr>
+                <th>Date & Time</th>
+                <th>Profile</th>
+                <th>Findings</th>
+                <th>Overall Risk</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for scan in history %}
+            <tr>
+                <td>
+                    <div style="font-weight:600;">{{ scan.start_time[:16].replace('T', ' ') }}</div>
+                    <div style="font-size:0.7rem; color:var(--text-muted);">{{ scan.scan_id[:18] }}...</div>
+                </td>
+                <td><span class="badge badge-secondary">{{ scan.scan_profile }}</span></td>
+                <td>
+                    <div style="font-size:0.85rem;">
+                        Total: <strong>{{ scan.total_findings }}</strong>
+                        {% if scan.critical > 0 %}<span style="color:var(--danger); margin-left:8px;">{{ scan.critical }} Critical</span>{% endif %}
+                    </div>
+                </td>
+                <td><span class="badge badge-{{ scan.overall_risk|lower }}">{{ scan.overall_risk }}</span></td>
+                <td>
+                    <a href="/report/{{ scan.scan_id }}" class="btn btn-secondary btn-sm">View Details</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <div class="icon">📜</div>
+        <h3>No Scans Found</h3>
+        <p>You haven't run any scans yet.</p>
+        <a href="/scan" class="btn btn-primary" style="margin-top:16px;">Run Your First Scan</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

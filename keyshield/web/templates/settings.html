@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>⚙️ Configuration</h2>
+    <p>Fine-tune security parameters and management whitelists</p>
+</div>
+
+<div class="card">
+    <div class="card-title"><span>🛡️</span> Scan Profile Analysis</div>
+    <p style="font-size:0.95rem; color:var(--text-secondary); margin-bottom:24px;">
+        Profiles determine the depth and sensitivity of behavioral heuristics.
+    </p>
+    <div class="detector-grid">
+        <div class="detector-card done profile-card" data-profile="quick" onclick="KeyShield.setProfile('quick')" style="cursor:pointer">
+            <div class="detector-status done"></div>
+            <div>
+                <div style="font-weight:700; font-size:1.1rem; margin-bottom:4px;">⚡ Quick</div>
+                <div style="font-size:0.85rem; color:var(--text-muted); line-height:1.4;">Optimized for speed. Checks critical injection points and known signatures.</div>
+            </div>
+        </div>
+        <div class="detector-card profile-card" data-profile="standard" onclick="KeyShield.setProfile('standard')" style="cursor:pointer">
+            <div class="detector-status done"></div>
+            <div>
+                <div style="font-weight:700; font-size:1.1rem; margin-bottom:4px;">🛡️ Standard</div>
+                <div style="font-size:0.85rem; color:var(--text-muted); line-height:1.4;">The recommended balance. Full behavioral analysis with optimized thresholds.</div>
+            </div>
+        </div>
+        <div class="detector-card done profile-card" data-profile="paranoid" onclick="KeyShield.setProfile('paranoid')" style="cursor:pointer">
+            <div class="detector-status done"></div>
+            <div>
+                <div style="font-weight:700; font-size:1.1rem; margin-bottom:4px;">🕵️ Paranoid</div>
+                <div style="font-size:0.85rem; color:var(--text-muted); line-height:1.4;">Maximum sensitivity. Analyzes all memory regions. High false-positive risk.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title"><span>⚪</span> Process Exclusion List</div>
+    <p style="font-size:0.95rem; color:var(--text-secondary); margin-bottom:24px;">
+        Processes in this list bypass all detection modules. 
+        <strong style="color:var(--warning)">Warning:</strong> Malware can mask its name to match whitelisted entries.
+    </p>
+    
+    <div style="display:flex; gap:12px; margin-bottom:24px;">
+        <input type="text" id="whitelist-input" placeholder="e.g. custom_internal_tool.exe">
+        <button id="btn-add-whitelist" class="btn btn-primary">Add Entry</button>
+    </div>
+
+    <div style="max-height:400px; overflow-y:auto; border:1px solid var(--border); border-radius:16px;" class="whitelist-container">
+        <table class="findings-table">
+            <thead>
+                <tr>
+                    <th>Process Binary Name</th>
+                    <th style="text-align:right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="whitelist-table-body">
+                <tr>
+                    <td colspan="2" style="text-align:center; padding:40px; color:var(--text-muted)">
+                        Loading whitelist...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-label">Version</div>
+        <div class="stat-value" style="font-size:1.5rem; margin-top:8px;">3.0.0</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-label">Environment</div>
+        <div class="stat-value" style="font-size:1.5rem; margin-top:8px;">{{ system_info.os }}</div>
+    </div>
+    <div class="stat-card" style="grid-column: span 2;">
+        <div class="stat-label">Local Config Path</div>
+        <div class="stat-value" style="font-size:1.1rem; margin-top:8px; font-family:monospace; color:var(--primary-light)">~/.keyshield/config.json</div>
+    </div>
+</div>
+{% endblock %}

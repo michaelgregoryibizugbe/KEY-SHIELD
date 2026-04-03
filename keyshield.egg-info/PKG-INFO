@@ -1,0 +1,640 @@
+Metadata-Version: 2.4
+Name: keyshield
+Version: 3.0.0
+Summary: All-in-One Input Security Monitor — Keylogger & Threat Detector
+Author: KeyShield Project
+License: MIT
+Project-URL: Homepage, https://github.com/yourusername/keyshield
+Project-URL: Documentation, https://github.com/yourusername/keyshield#readme
+Project-URL: Repository, https://github.com/yourusername/keyshield
+Project-URL: Issues, https://github.com/yourusername/keyshield/issues
+Project-URL: Changelog, https://github.com/yourusername/keyshield/blob/main/CHANGELOG.md
+Keywords: security,keylogger,detector,endpoint,cybersecurity
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: System Administrators
+Classifier: Topic :: Security
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Environment :: Console
+Classifier: Environment :: Web Environment
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: psutil>=5.9.0
+Requires-Dist: flask>=3.0.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0; extra == "dev"
+Requires-Dist: flake8>=6.0; extra == "dev"
+Requires-Dist: black>=23.0; extra == "dev"
+Dynamic: license-file
+Dynamic: requires-python
+
+<div align="center">
+
+<img src="keyshield/web/static/img/shield.svg" alt="KeyShield Logo" width="120" height="140">
+
+# 🛡️ KeyShield v3.0
+
+### All-in-One Input Security Monitor
+
+**Detect keyloggers, rootkits, input hooks, clipboard hijackers, screen capture tools,
+DLL/.so injection, BadUSB devices, network exfiltration, and persistence mechanisms.**
+
+[![Python 3.8+](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20|%20Linux%20|%20macOS-0f3460?style=for-the-badge)]()
+[![MITRE ATT&CK](https://img.shields.io/badge/MITRE-ATT%26CK%20Mapped-ef4444?style=for-the-badge)](https://attack.mitre.org/)
+
+[![GitHub Stars](https://img.shields.io/github/stars/yourusername/keyshield?style=social)](https://github.com/yourusername/keyshield)
+[![GitHub Forks](https://img.shields.io/github/forks/yourusername/keyshield?style=social)](https://github.com/yourusername/keyshield)
+[![GitHub Issues](https://img.shields.io/github/issues/yourusername/keyshield)](https://github.com/yourusername/keyshield/issues)
+[![GitHub Release](https://img.shields.io/github/v/release/yourusername/keyshield)](https://github.com/yourusername/keyshield/releases)
+
+<br>
+
+[**🚀 Quick Start**](#-quick-start) •
+[**🌐 Web GUI**](#-web-gui) •
+[**🔍 Detectors**](#-detection-modules) •
+[**📖 Docs**](#-documentation) •
+[**🤝 Contributing**](CONTRIBUTING.md)
+
+<br>
+
+<img src="docs/screenshots/dashboard.png" alt="KeyShield Dashboard" width="800">
+
+</div>
+
+---
+
+## 📋 Table of Contents
+
+- [Features](#-features)
+- [Quick Start](#-quick-start)
+- [Web GUI](#-web-gui)
+- [CLI Usage](#-cli-usage)
+- [Python API](#-python-api)
+- [Detection Modules](#-detection-modules)
+- [Configuration](#%EF%B8%8F-configuration)
+- [Platform Support](#-platform-support)
+- [MITRE ATT&CK Coverage](#-mitre-attck-coverage)
+- [Architecture](#-architecture)
+- [Testing](#-testing)
+- [Documentation](#-documentation)
+- [Contributing](#-contributing)
+- [Security](#-security)
+- [License](#-license)
+- [Acknowledgments](#-acknowledgments)
+
+---
+
+## ✨ Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🔍 Detection Engine
+- **12 specialized detectors** working in parallel
+- **Known signature database** with 30+ keylogger families
+- **Behavioral heuristics** with tiered keyword scoring
+- **Self-exclusion** — never flags itself as a threat
+- **Finding deduplication** — no duplicate alerts
+- **Cross-platform** — Windows, Linux, macOS
+
+</td>
+<td width="50%">
+
+### 🖥️ User Interface
+- **Web GUI** — dark cybersecurity dashboard
+- **CLI** — full-featured command-line interface
+- **Python API** — integrate into your own tools
+- **Real-time progress** via Server-Sent Events
+- **Auto-launches browser** for beginners
+- **Report export** — JSON, TXT, CSV
+
+</td>
+</tr>
+<tr>
+<td>
+
+### 🛡️ Security Features
+- **MITRE ATT&CK mapped** — every finding has a technique ID
+- **Threat scoring** — CLEAN → LOW → MEDIUM → HIGH → CRITICAL
+- **Scan profiles** — quick, standard, paranoid
+- **Configurable whitelist** — reduce false positives
+- **Log integrity** — rotating log files with timestamps
+- **Path traversal protection** on report downloads
+
+</td>
+<td>
+
+### 🔧 Architecture
+- **Modular detector system** — add new detectors easily
+- **BaseDetector pattern** — shared self-exclusion logic
+- **Thread-safe web server** — proper locking on shared state
+- **Configuration system** — `~/.keyshield/config.json`
+- **Robust error handling** — detectors fail independently
+- **Zero external dependencies** beyond `psutil` and `flask`
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Python 3.8+** ([Download](https://python.org/downloads/))
+- **pip** (included with Python)
+- **Git** ([Download](https://git-scm.com/))
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/keyshield.git
+cd keyshield
+
+# Install in development mode
+pip install -e .
+
+# Or install directly
+pip install .
+```
+
+### First Scan
+
+```bash
+# Launch the Web GUI (recommended for beginners)
+keyshield --web
+
+# Or run a CLI scan
+keyshield --scan
+
+# Quick scan (faster)
+keyshield --scan --quick
+```
+
+### Elevated Privileges (Recommended)
+
+```bash
+# Linux / macOS
+sudo keyshield --scan
+sudo keyshield --web
+
+# Windows (run terminal as Administrator)
+keyshield --scan
+keyshield --web
+```
+
+> ⚠️ **Some detectors require elevated privileges** to access process memory maps,
+> kernel modules, and system-level input devices.
+
+---
+
+## 🌐 Web GUI
+
+KeyShield includes a full web-based dashboard that **auto-opens in your browser**.
+
+```bash
+# Default: http://127.0.0.1:5000
+keyshield --web
+
+# Custom port
+keyshield --web --port 9090
+
+# Don't auto-open browser
+keyshield --web --no-browser
+
+# Bind to all interfaces (use with caution)
+keyshield --web --host 0.0.0.0 --port 8080
+```
+
+### Dashboard Features
+
+| Feature | Description |
+|---------|-------------|
+| 🏠 **Dashboard** | System overview, privilege status, recent scans |
+| 🔍 **Scan Page** | One-click full/quick scan with real-time progress |
+| 📊 **Live Progress** | SSE-powered detector status grid |
+| 📄 **Report Viewer** | Detailed findings with severity badges |
+| 📋 **History** | Browse previous scan results |
+| ⚙️ **Settings** | System info, detector list, privilege status |
+| 📥 **Export** | Download reports as JSON, TXT, or CSV |
+
+---
+
+## 💻 CLI Usage
+
+```
+Usage: keyshield [OPTIONS]
+
+Options:
+  --scan              Run a security scan
+  --quick             Quick scan (fewer checks, faster)
+  --json              Generate JSON report
+  --output, -o PATH   Custom report output path
+  --web               Launch the Web GUI dashboard
+  --port PORT         Web GUI port (default: 5000)
+  --host HOST         Web GUI host (default: 127.0.0.1)
+  --no-browser        Don't auto-open browser
+  --no-banner         Suppress startup banner
+  --verbose, -v       Verbose output
+  --help, -h          Show help message
+```
+
+### Examples
+
+```bash
+# Full scan with all reports
+keyshield --scan --json
+
+# Quick scan with custom output
+keyshield --scan --quick -o /tmp/my_report.txt
+
+# Web GUI on custom port without browser
+keyshield --web --port 9090 --no-browser
+
+# Quiet scan (no banner)
+keyshield --scan --no-banner
+```
+
+### Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | Scan complete — risk level CLEAN, LOW, or MEDIUM |
+| `1` | Scan complete — risk level HIGH or CRITICAL |
+
+---
+
+## 🐍 Python API
+
+Use KeyShield programmatically in your own security tools:
+
+```python
+from keyshield import ScanEngine, ThreatLevel
+
+# Initialize and run scan
+engine = ScanEngine()
+result = engine.run_scan(quick=False, profile="standard")
+
+# Check overall risk
+print(f"Risk: {result.overall_risk.name}")
+print(f"Findings: {result.total_findings}")
+
+# Iterate findings
+for finding in result.findings:
+    if finding.level.value >= ThreatLevel.HIGH.value:
+        print(f"  🔴 [{finding.level.name}] {finding.title}")
+        print(f"     {finding.description}")
+        print(f"     Evidence: {finding.evidence}")
+        print(f"     MITRE: {finding.mitre_id}")
+        print()
+
+# Export results
+from keyshield.utils.reporter import ReportGenerator
+
+ReportGenerator.generate_json_report(result, "scan_results.json")
+ReportGenerator.generate_csv_report(result, "scan_results.csv")
+ReportGenerator.generate_text_report(result, "scan_results.txt")
+
+# Access as dictionary
+data = result.to_dict()
+```
+
+### Progress Callbacks
+
+```python
+def on_progress(detector_name, current, total):
+    pct = int((current / total) * 100)
+    print(f"[{pct:3d}%] Running: {detector_name}")
+
+engine = ScanEngine()
+result = engine.run_scan(progress_callback=on_progress)
+```
+
+### Configuration
+
+```python
+from keyshield.core.config import get_config
+
+config = get_config()
+
+# Add process to whitelist
+config.add_to_whitelist("my_trusted_tool")
+
+# Change scan profile
+config.set_profile("paranoid")  # "quick", "standard", "paranoid"
+```
+
+---
+
+## 🔍 Detection Modules
+
+KeyShield includes **12 specialized detectors**, each targeting a different attack vector:
+
+### Core Detectors
+
+| # | Detector | Description | MITRE ATT&CK |
+|---|----------|-------------|---------------|
+| 1 | 🔑 **Keylogger Detector** | Known keylogger signatures (30+ families) + behavioral heuristics | [T1056.001](https://attack.mitre.org/techniques/T1056/001/) |
+| 2 | 🪝 **Hook Detector** | Win: DLL hooks · Linux: LD_PRELOAD, ptrace, xinput, /dev/input | [T1056.001](https://attack.mitre.org/techniques/T1056/001/), [T1574.006](https://attack.mitre.org/techniques/T1574/006/), [T1055.008](https://attack.mitre.org/techniques/T1055/008/) |
+| 3 | ⚙️ **Process Detector** | Parent-child analysis, duplicate detection, recently spawned | [T1055](https://attack.mitre.org/techniques/T1055/), [T1059](https://attack.mitre.org/techniques/T1059/) |
+| 4 | 📋 **Clipboard Monitor** | Clipboard hijacking detection + rapid-change monitoring | [T1115](https://attack.mitre.org/techniques/T1115/) |
+| 5 | 📸 **Screen Capture Detector** | Win: GDI capture · Linux: framebuffer + screen tools | [T1113](https://attack.mitre.org/techniques/T1113/) |
+| 6 | 🌐 **Network Exfil Detector** | C2 ports, suspicious connections, DNS tunneling | [T1041](https://attack.mitre.org/techniques/T1041/), [T1048.003](https://attack.mitre.org/techniques/T1048/003/) |
+
+### Advanced Detectors
+
+| # | Detector | Description | MITRE ATT&CK |
+|---|----------|-------------|---------------|
+| 7 | 💉 **DLL/SO Injection** | Win: malicious DLLs · Linux: /proc/maps .so analysis | [T1055.001](https://attack.mitre.org/techniques/T1055/001/), [T1055.009](https://attack.mitre.org/techniques/T1055/009/) |
+| 8 | 🔄 **Persistence Detector** | Win: Registry/Startup · Linux: cron/systemd · macOS: LaunchAgent | [T1547.001](https://attack.mitre.org/techniques/T1547/001/), [T1053.003](https://attack.mitre.org/techniques/T1053/003/) |
+| 9 | 🧠 **Memory Scanner** | Fileless malware indicators, memory anomalies | [T1055](https://attack.mitre.org/techniques/T1055/) |
+| 10 | 🐧 **Kernel Module Detector** | Rootkit kernel modules, hidden modules, tainted kernel | [T1014](https://attack.mitre.org/techniques/T1014/) |
+| 11 | 🔌 **USB HID Detector** | BadUSB, Rubber Ducky, O.MG Cable, multiple keyboards | [T1200](https://attack.mitre.org/techniques/T1200/) |
+| 12 | ⏰ **Scheduled Task Detector** | Win: Task Scheduler · Linux: crontab/systemd timers | [T1053.005](https://attack.mitre.org/techniques/T1053/005/), [T1053.003](https://attack.mitre.org/techniques/T1053/003/) |
+
+---
+
+## ⚙️ Configuration
+
+KeyShield stores configuration in `~/.keyshield/config.json`.
+
+### Scan Profiles
+
+| Profile | Description | Detectors | Clipboard Monitor |
+|---------|-------------|-----------|-------------------|
+| `quick` | Fast essential scan | 10 (skips Memory, ScreenCapture) | Disabled |
+| `standard` | Balanced full scan | All 12 | 1.5s |
+| `paranoid` | Maximum sensitivity | All 12 + lower thresholds | 3.0s |
+
+### Whitelist
+
+Reduce false positives by whitelisting trusted processes:
+
+```python
+from keyshield.core.config import get_config
+
+config = get_config()
+config.add_to_whitelist("my_custom_monitoring_tool")
+config.remove_from_whitelist("some_process")
+```
+
+Or edit `~/.keyshield/config.json` directly:
+
+```json
+{
+  "whitelist": [
+    "my_custom_monitoring_tool",
+    "another_trusted_process"
+  ]
+}
+```
+
+### Built-in Whitelist
+
+KeyShield ships with a whitelist of ~60 common legitimate processes including:
+- System processes (`systemd`, `init`, `svchost.exe`, etc.)
+- Desktop environments (GNOME, KDE, XFCE, etc.)
+- Common applications (browsers, editors, terminals)
+- Development tools
+
+---
+
+## 📊 Platform Support
+
+| Detector | Windows | Linux | macOS |
+|----------|:-------:|:-----:|:-----:|
+| Keylogger Detector | ✅ | ✅ | ✅ |
+| Hook Detector (DLL hooks) | ✅ | — | — |
+| Hook Detector (LD_PRELOAD) | — | ✅ | — |
+| Hook Detector (ptrace) | — | ✅ | — |
+| Hook Detector (xinput/X11) | — | ✅ | — |
+| Hook Detector (/dev/input) | — | ✅ | — |
+| Process Detector | ✅ | ✅ | ✅ |
+| Clipboard Monitor | ✅ | ✅ | ✅ |
+| Screen Capture (GDI) | ✅ | — | — |
+| Screen Capture (Framebuffer) | — | ✅ | — |
+| Network Exfil Detector | ✅ | ✅ | ✅ |
+| DLL Injection Detector | ✅ | — | — |
+| SO Injection Detector | — | ✅ | — |
+| Persistence (Registry) | ✅ | — | — |
+| Persistence (cron/systemd) | — | ✅ | — |
+| Persistence (LaunchAgent) | — | — | ✅ |
+| Memory Scanner | ✅ | ✅ | ✅ |
+| Kernel Module Detector | — | ✅ | — |
+| USB HID Detector | ✅ | ✅ | — |
+| Scheduled Task Detector | ✅ | ✅ | — |
+
+---
+
+## 🗺️ MITRE ATT&CK Coverage
+
+KeyShield maps findings to the [MITRE ATT&CK Framework](https://attack.mitre.org/):
+
+```
+Tactic                    Technique                    Detector
+──────────────────────────────────────────────────────────────────
+Collection                T1056.001 Keylogging         Keylogger, Hook
+Collection                T1115 Clipboard Data         Clipboard Monitor
+Collection                T1113 Screen Capture         Screen Capture
+Credential Access         T1056.001 Input Capture      Keylogger, Hook
+Defense Evasion           T1014 Rootkit                Kernel Module
+Defense Evasion           T1055 Process Injection      DLL/SO Injection, Memory
+Defense Evasion           T1055.001 DLL Injection      DLL Injection
+Defense Evasion           T1055.008 Ptrace Injection   Hook Detector
+Defense Evasion           T1055.009 Proc Mem Inject    SO Injection
+Defense Evasion           T1055.012 Process Hollowing  Process Detector
+Execution                 T1059 Command Interpreter    Process Detector
+Exfiltration              T1041 Exfil Over C2          Network Exfil
+Exfiltration              T1048.003 DNS Exfiltration   Network Exfil
+Initial Access            T1200 Hardware Additions     USB HID
+Persistence               T1053.003 Cron               Scheduled Task
+Persistence               T1053.005 Scheduled Task     Scheduled Task
+Persistence               T1547.001 Registry Run Keys  Persistence
+Persistence               T1574.006 LD_PRELOAD         Hook Detector
+```
+
+---
+
+## 🏗️ Architecture
+
+```
+keyshield/
+├── core/
+│   ├── engine.py          # Scan orchestration, dedup, profiles
+│   ├── config.py          # Configuration, whitelist, self-exclusion
+│   └── threat_db.py       # Signatures, keywords, IoCs
+├── detectors/
+│   ├── base_detector.py   # Shared base class with self-exclusion
+│   ├── keylogger_detector.py
+│   ├── hook_detector.py   # Cross-platform (Windows + Linux)
+│   ├── process_detector.py
+│   ├── clipboard_monitor.py
+│   ├── screen_capture_detector.py
+│   ├── network_exfil_detector.py
+│   ├── dll_injection_detector.py  # DLL (Win) + .so (Linux)
+│   ├── persistence_detector.py
+│   ├── memory_scanner.py
+│   ├── kernel_module_detector.py  # Linux rootkit detection
+│   ├── usb_detector.py           # BadUSB / Rubber Ducky
+│   └── scheduled_task_detector.py # Task Scheduler / cron
+├── utils/
+│   ├── logger.py          # Rotating log files
+│   ├── reporter.py        # JSON, TXT, CSV export
+│   ├── system_info.py     # Cross-platform system info
+│   └── helpers.py         # Hashing, admin check, path safety
+├── cli/
+│   └── main.py            # Argparse CLI with --web flag
+└── web/
+    ├── app.py             # Flask app with SSE, thread-safe state
+    ├── templates/         # Jinja2 HTML templates
+    └── static/            # CSS, JS, images
+```
+
+### Key Design Decisions
+
+1. **BaseDetector Pattern** — All detectors inherit from `BaseDetector`, which provides `self.safe_process_iter()` (skips own PIDs + whitelist) and config access.
+
+2. **Self-Exclusion** — `Config._collect_own_pids()` tracks KeyShield's PID tree so detectors never flag themselves. This eliminates the most common false positive.
+
+3. **Tiered Keyword Matching** — `SUSPICIOUS_PROCESS_KEYWORDS` (strong, 1 match = flag) vs `WEAK_SUSPICIOUS_KEYWORDS` (need 2+ matches). Dramatically reduces false positives on generic words like "monitor".
+
+4. **Finding Deduplication** — Engine deduplicates by `(pid, title)` tuple before returning results.
+
+5. **Thread-Safe Web State** — `threading.Lock` protects `_scan_state` and `_scan_history` from race conditions.
+
+---
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+python -m pytest tests/ -v
+
+# Run with coverage
+python -m pytest tests/ --cov=keyshield --cov-report=html
+
+# Run specific test file
+python -m pytest tests/test_engine.py -v
+
+# Run specific test
+python -m pytest tests/test_engine.py::TestConfig::test_self_exclusion -v
+```
+
+### Test Files
+
+| File | Coverage |
+|------|----------|
+| `tests/test_engine.py` | ScanEngine, ScanResult, Finding, dedup |
+| `tests/test_config.py` | Config, whitelist, profiles, self-exclusion |
+| `tests/test_detectors.py` | All 12 detectors return valid results |
+| `tests/test_web.py` | Flask routes, API endpoints, SSE |
+
+---
+
+## 📖 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [README.md](README.md) | This file — overview and quick start |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How to contribute |
+| [SECURITY.md](SECURITY.md) | Security policy and vulnerability reporting |
+| [CHANGELOG.md](CHANGELOG.md) | Version history |
+| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Community standards |
+| [LICENSE](LICENSE) | MIT License |
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+Quick summary:
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/my-detector`)
+3. Write tests for your changes
+4. Submit a Pull Request
+
+### Adding a New Detector
+
+```python
+# keyshield/detectors/my_detector.py
+from .base_detector import BaseDetector
+from ..core.engine import Finding
+from ..core.threat_db import ThreatLevel, ThreatCategory
+
+class MyDetector(BaseDetector):
+    NAME = "MyDetector"
+
+    def scan(self, quick=False):
+        findings = []
+        # Your detection logic here
+        # Use self.safe_process_iter() to iterate processes
+        return findings
+```
+
+Then register it in `keyshield/core/engine.py` and `keyshield/detectors/__init__.py`.
+
+---
+
+## 🔒 Security
+
+See [SECURITY.md](SECURITY.md) for our security policy.
+
+- **KeyShield is a defensive tool** — it detects threats, it does not create them
+- **No data is collected or transmitted** — all scans are local
+- **No telemetry** — KeyShield never phones home
+- **Report responsibly** — if you find a vulnerability, please report it privately
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- [psutil](https://github.com/giampaolo/psutil) — Cross-platform process and system utilities
+- [Flask](https://flask.palletsprojects.com/) — Lightweight web framework
+- [MITRE ATT&CK®](https://attack.mitre.org/) — Threat classification framework
+- The open-source cybersecurity community
+
+---
+
+## ⭐ Star History
+
+If KeyShield helped you, please consider giving it a ⭐ star!
+
+```
+           ⭐ Star this repo if you find it useful!
+    ┌──────────────────────────────────────────┐
+    │  github.com/yourusername/keyshield       │
+    └──────────────────────────────────────────┘
+```
+
+---
+
+<div align="center">
+
+**Made with 🛡️ by the KeyShield Project**
+
+[Report Bug](https://github.com/yourusername/keyshield/issues/new?template=bug_report.md) •
+[Request Feature](https://github.com/yourusername/keyshield/issues/new?template=feature_request.md) •
+[Security Issue](SECURITY.md)
+
+</div>

@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "keyshield"
+version = "3.0.0"
+description = "All-in-One Input Security Monitor — Keylogger & Threat Detector"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+authors = [
+    {name = "KeyShield Project"},
+]
+keywords = ["security", "keylogger", "detector", "endpoint", "cybersecurity"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "Topic :: Security",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+    "Environment :: Web Environment",
+]
+dependencies = [
+    "psutil>=5.9.0",
+    "flask>=3.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "flake8>=6.0",
+    "black>=23.0",
+]
+
+[project.scripts]
+keyshield = "keyshield.cli.main:main"
+
+[project.urls]
+Homepage = "https://github.com/yourusername/keyshield"
+Documentation = "https://github.com/yourusername/keyshield#readme"
+Repository = "https://github.com/yourusername/keyshield"
+Issues = "https://github.com/yourusername/keyshield/issues"
+Changelog = "https://github.com/yourusername/keyshield/blob/main/CHANGELOG.md"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+[tool.black]
+line-length = 100
+target-version = ["py38", "py39", "py310", "py311", "py312"]
+
+[tool.flake8]
+max-line-length = 120
+ignore = ["E501", "W503", "E402"]
+exclude = [".git", "__pycache__", "build", "dist", "*.egg-info"]

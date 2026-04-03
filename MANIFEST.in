@@ -1,0 +1,7 @@
+include LICENSE
+include README.md
+include CHANGELOG.md
+include SECURITY.md
+include requirements.txt
+recursive-include keyshield/web/templates *.html
+recursive-include keyshield/web/static *.css *.js *.svg

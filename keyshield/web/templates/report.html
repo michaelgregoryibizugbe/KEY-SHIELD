@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}Scan Report{% endblock %}
+
+{% block content %}
+{% if not result %}
+<div class="card">
+    <div class="empty-state">
+        <div class="icon">❓</div>
+        <h3>Report Not Found</h3>
+        <p>The requested scan report could not be located.</p>
+        <a href="/history" class="btn btn-primary" style="margin-top:16px;">Back to History</a>
+    </div>
+</div>
+{% else %}
+<div class="page-header">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+        <div>
+            <h2>📄 Scan Report</h2>
+            <p>ID: {{ result.scan_id }} | {{ result.start_time[:19].replace('T', ' ') }}</p>
+        </div>
+        <div style="display:flex; gap:12px;">
+            <a href="/api/reports/download/scan_{{ result.start_time[:19].replace(':', '').replace('-', '').replace(' ', '_') }}.json" class="btn btn-secondary btn-sm">JSON</a>
+            <a href="/api/reports/download/scan_{{ result.start_time[:19].replace(':', '').replace('-', '').replace(' ', '_') }}.csv" class="btn btn-secondary btn-sm">CSV</a>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="risk-meter">
+        <div style="font-size:1rem; color:var(--text-secondary)">Overall Risk Assessment</div>
+        <div class="risk-level {{ result.overall_risk|lower }}">
+            {% if result.overall_risk == 'CLEAN' %}✅{% elif result.overall_risk == 'LOW' %}🟡{% elif result.overall_risk == 'MEDIUM' %}🟠{% elif result.overall_risk == 'HIGH' %}🔴{% else %}🚨{% endif %}
+            {{ result.overall_risk }}
+        </div>
+        <div style="font-size:0.85rem; color:var(--text-muted);">
+            Scan took {{ result.duration_seconds }}s using {{ result.scan_profile }} profile
+        </div>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card critical">
+        <div class="stat-value">{{ result.critical }}</div>
+        <div class="stat-label">Critical</div>
+    </div>
+    <div class="stat-card high">
+        <div class="stat-value">{{ result.high }}</div>
+        <div class="stat-label">High</div>
+    </div>
+    <div class="stat-card medium">
+        <div class="stat-value">{{ result.medium }}</div>
+        <div class="stat-label">Medium</div>
+    </div>
+    <div class="stat-card low">
+        <div class="stat-value">{{ result.low }}</div>
+        <div class="stat-label">Low</div>
+    </div>
+</div>
+
+{% if result.findings %}
+<div class="card" style="margin-top:24px;">
+    <div class="card-title">Detailed Findings ({{ result.total_findings }})</div>
+    <table class="findings-table">
+        <thead>
+            <tr>
+                <th>Severity</th>
+                <th>Title & Evidence</th>
+                <th>Category</th>
+                <th>MITRE</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for f in result.findings|sort(attribute='level_value', reverse=True) %}
+            <tr>
+                <td><span class="badge badge-{{ f.level|lower }}">{{ f.level }}</span></td>
+                <td>
+                    <strong>{{ f.title }}</strong>
+                    <div class="finding-detail">
+                        <div style="font-size:0.85rem; color:var(--text-secondary)">{{ f.description }}</div>
+                        {% if f.evidence %}
+                        <div class="evidence">{{ f.evidence }}</div>
+                        {% endif %}
+                        {% if f.recommendation %}
+                        <div class="recommendation">💡 {{ f.recommendation }}</div>
+                        {% endif %}
+                        {% if f.pid %}
+                        <div style="margin-top:4px; font-size:0.8rem; color:var(--text-muted)">
+                            Process: {{ f.process_name or 'Unknown' }} (PID: {{ f.pid }})
+                        </div>
+                        {% endif %}
+                    </div>
+                </td>
+                <td style="font-size:0.8rem">{{ f.category }}</td>
+                <td>
+                    {% if f.mitre_id %}
+                    <span class="mitre-tag">{{ f.mitre_id }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card" style="margin-top:24px;">
+    <div class="empty-state">
+        <div class="icon">✅</div>
+        <h3>No Threats Detected</h3>
+        <p>This scan did not find any indicators of compromise.</p>
+    </div>
+</div>
+{% endif %}
+
+<div class="card">
+    <div class="card-title">🔍 Detectors Analysis</div>
+    <div class="detector-grid">
+        {% for name, count in result.detector_results.items() %}
+        <div class="detector-card done">
+            <div class="detector-status {% if count > 0 %}running{% else %}done{% endif %}"></div>
+            <div>
+                <div style="font-weight:600; font-size:0.85rem;">{{ name.replace('Detector', '') }}</div>
+                <div style="font-size:0.75rem; color:var(--text-muted);">
+                    {% if count == -1 %}Error{% elif count == 0 %}Clean{% else %}{{ count }} found{% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
